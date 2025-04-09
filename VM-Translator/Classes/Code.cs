@@ -57,6 +57,36 @@ class Code: IDisposable
                 "@SP",
                 "M=M+1");
         }
+        else if (segment is "pointer")
+        {
+            string pointerAddress = index switch
+            {
+                0 => "THIS",
+                1 => "THAT",
+                _ => throw new InvalidOperationException("Pointer address does not exist")
+            };
+
+            if (command == "C_PUSH")
+            {
+                asm = string.Join("\n",
+                    $"@{pointerAddress}",
+                    "D=M",
+                    "@SP",
+                    "A=M",
+                    "M=D",
+                    "@SP",
+                    "M=M+1");
+            }
+            else if (command == "C_POP")
+            {
+                asm = string.Join("\n",
+                "@SP",
+                "AM=M-1",
+                "D=M",
+                $"@{pointerAddress}",
+                "M=D");
+            }
+        }
         _writer.WriteLine(asm);
         Console.WriteLine(asm);
     }
