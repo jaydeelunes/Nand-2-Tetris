@@ -11,12 +11,12 @@ class Code: IDisposable
 
     public void WriteArithmetic(string operation)
     {
-        
+        Console.WriteLine(operation);
     }
 
     public void WritePushPop(string command, string segment, int index)
     {
-
+        Console.WriteLine($"{command}: {segment} - {index}");
     }
 
     public void Dispose()

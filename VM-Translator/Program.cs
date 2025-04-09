@@ -25,28 +25,31 @@ class Program
             Environment.Exit(3);
         }
 
-
+        // Read and parse provided .vm document
         var parser = new Parser(args[0]);
 
+        // Translate every command to asm and write to .asm file
+        using var coder = new Code(args[0].Split(".")[0] + "asm");
         while (parser.HasMoreCommands())
         {
             parser.Advance();
 
             var type = parser.CommandType();
             var arg1 = parser.Arg1();
-            int? arg2 = null;
 
-            if (type is "C_PUSH" or "C_POP" or "C_FUNCTION" or "C_CALL")
+            if (type == "C_ARITHMETIC")
             {
-                arg2 = parser.Arg2();
+                coder.WriteArithmetic(arg1);
             }
-
-
+            else if (type is "C_PUSH" or "C_POP" or "C_FUNCTION" or "C_CALL")
+            {
+                var arg2 = parser.Arg2();
+                coder.WritePushPop(type, arg1, arg2);
+            }
+            else
+            {
+                throw new InvalidOperationException("Command type not implemented in the current version");
+            }
         }
-
-
-
-
     }
-    
 }
