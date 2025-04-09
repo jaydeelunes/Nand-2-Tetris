@@ -29,7 +29,7 @@ class Program
         var parser = new Parser(args[0]);
 
         // Translate every command to asm and write to .asm file
-        using var coder = new Code(args[0].Split(".")[0] + "asm");
+        using var coder = new Code(args[0].Split(".")[0] + ".asm");
         while (parser.HasMoreCommands())
         {
             parser.Advance();
