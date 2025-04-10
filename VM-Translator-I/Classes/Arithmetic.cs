@@ -15,7 +15,8 @@ class Arithmetic
             "not" => "!M",
             _ => throw new InvalidOperationException("Operation does not exist")
         };
-
+        
+        // Returns commands as a string
         return string.Join("\n",
         GetArguments(operation),
         $"D={operationCommand}",
@@ -36,7 +37,8 @@ class Arithmetic
             "eq" => "JEQ",
             _ => throw new InvalidOperationException("Operation does not exist")
         };
-    
+
+        // Returns commands as a string
         return string.Join("\n",
             GetArguments(operation),
             "D=M-D",
@@ -59,10 +61,12 @@ class Arithmetic
     // Returns the Hack Machine Language commands to either pop 1 or 2 arguments of the stack for the operation
     private static string GetArguments(string operation)
     {
+        // Pops one argument of the stack
         string arguments = string.Join("\n",
             "@SP",
             "AM=M-1");
 
+        // Pops second argument of the stack if two arguments are required
         if (operation != "neg" && operation != "not")
         {
             arguments = string.Join("\n",

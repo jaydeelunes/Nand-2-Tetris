@@ -1,2 +1,2 @@
-# Nand-2-Tetris
-Projects I make for the Nand 2 Tetris course
+# Nand 2 Tetris
+My assignments for the modules in Nand 2 Tetris pt. 2

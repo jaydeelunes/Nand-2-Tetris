@@ -29,22 +29,24 @@ class Program
         var parser = new Parser(args[0]);
 
         // Translate every command to asm and write to .asm file
-        using var coder = new Code(args[0].Split(".")[0] + ".asm");
+        using var codeWriter = new CodeWriter(args[0].Split(".")[0] + ".asm");
         while (parser.HasMoreCommands())
         {
+            // Advance to the next command
             parser.Advance();
 
+            // Get the command type and first argument
             var type = parser.CommandType();
             var arg1 = parser.Arg1();
 
             if (type == "C_ARITHMETIC")
             {
-                coder.WriteArithmetic(arg1);
+                codeWriter.WriteArithmetic(arg1);
             }
             else if (type is "C_PUSH" or "C_POP" or "C_FUNCTION" or "C_CALL")
             {
                 var arg2 = parser.Arg2();
-                coder.WritePushPop(type, arg1, arg2);
+                codeWriter.WritePushPop(type, arg1, arg2);
             }
             else
             {

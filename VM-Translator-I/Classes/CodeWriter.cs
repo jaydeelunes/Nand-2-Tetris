@@ -1,34 +1,33 @@
-using System.Runtime.CompilerServices;
-using System.Runtime.Intrinsics.X86;
-
 namespace VM_Translator.Classes;
 
-class Code: IDisposable
+class CodeWriter: IDisposable
 {
     private StreamWriter _writer;
     private string _fileName;
     private int _compCount = 0;
 
-    public Code(string filePath)
+    public CodeWriter(string filePath)
     {
         _writer = new StreamWriter(filePath);
         _fileName = Path.GetFileNameWithoutExtension(filePath);
     }
 
+    // Write the code for arithmetic and logic operations
     public void WriteArithmetic(string operation)
     {
+        // Writes the VM command as a comment
         _writer.WriteLine($"// {operation}");
-        Console.WriteLine($"// {operation}");
         string asm = String.Empty;
 
+        // Calls function based on operation
         if (operation is "add" or "sub" or "and" or "or" or "not" or "neg") asm = Arithmetic.Operation(operation);
         else if (operation is "gt" or "lt" or "eq"){
             asm = Arithmetic.Comparison(operation, _compCount);
             _compCount++;
         }
 
+        // Write line to output
         _writer.WriteLine(asm);
-        Console.WriteLine(asm);
     }
 
     public void WritePushPop(string command, string segment, int index)
@@ -39,7 +38,6 @@ class Code: IDisposable
         if (segment is "local" or "argument" or "this" or "that" or "temp" or "static")
         {
             _writer.WriteLine($"// {commandText} {segment} {index}");
-            Console.WriteLine($"// {commandText} {segment} {index}");
 
             if (command == "C_PUSH") asm = Push(segment, index);
             else if (command == "C_POP") asm = Pop(segment, index);
@@ -47,7 +45,6 @@ class Code: IDisposable
         else if (segment is "constant")
         {
             _writer.WriteLine($"// push constant {index}");
-            Console.WriteLine($"// push constant {index}");
             asm = string.Join("\n",
                 $"@{index}",
                 "D=A",
@@ -88,7 +85,6 @@ class Code: IDisposable
             }
         }
         _writer.WriteLine(asm);
-        Console.WriteLine(asm);
     }
 
     public void Dispose()
